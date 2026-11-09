@@ -1,1 +1,499 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Texas Scramble Pro</title>
+    <style>
+        /* Apple iOS Style CSS */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f2f2f7;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 16px;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container {
+            max-width: 650px;
+            width: 100%;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+        }
+        h2, h3 {
+            color: #000000;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 6px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            font-size: 13px;
+            text-align: center;
+            color: #8e8e93;
+            margin-bottom: 24px;
+        }
+        
+        /* Apple Segmented Control (Toggle) */
+        .toggle-container {
+            display: flex;
+            background-color: #e3e3e8;
+            border-radius: 8px;
+            padding: 2px;
+            margin-bottom: 24px;
+        }
+        .toggle-btn {
+            flex: 1;
+            padding: 8px 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            color: #000000;
+            border-radius: 6px;
+            transition: all 0.2s ease-in-out;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .toggle-btn.active {
+            background-color: #ffffff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12), 0 3px 1px rgba(0,0,0,0.04);
+        }
 
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #1c1c1e;
+        }
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            background-color: #f2f2f7;
+            border: none;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #000000;
+        }
+        input:focus {
+            outline: 2px solid #007aff;
+            background-color: #ffffff;
+        }
+        
+        .player-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .player-row input[type="text"] { flex: 2; }
+        .player-row input[type="number"] { flex: 1; }
+        
+        .divider {
+            border-bottom: 1px solid #e5e5ea;
+            margin: 24px 0;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+        .button-row {
+            display: flex;
+            gap: 12px;
+        }
+        button.action-btn {
+            flex: 1;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.2s;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        button.action-btn:active {
+            opacity: 0.7;
+        }
+        
+        .btn-primary { background-color: #007aff; color: white; }
+        .btn-success { background-color: #34c759; color: white; }
+        .btn-secondary { background-color: #e5e5ea; color: #007aff; }
+        
+        .btn-delete {
+            background-color: transparent;
+            color: #ff3b30;
+            border: none;
+            font-size: 18px;
+            padding: 5px;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        #result-box {
+            margin-top: 24px;
+            padding: 20px;
+            background-color: #f2f2f7;
+            border-radius: 14px;
+            display: none;
+        }
+        .result-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #3a3a3c;
+        }
+        .total-line {
+            font-size: 17px;
+            font-weight: 600;
+            color: #000000;
+            border-top: 1px solid #c6c6c8;
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+        .net-score-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: #007aff;
+        }
+
+        .table-container { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: left;
+        }
+        th, td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #e5e5ea;
+        }
+        th { 
+            color: #8e8e93; 
+            font-weight: 600; 
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        .rank-1 { background-color: rgba(255, 215, 0, 0.15); }
+        .rank-2 { background-color: rgba(192, 192, 192, 0.15); }
+        .rank-3 { background-color: rgba(205, 127, 50, 0.15); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>Scramble Calculator</h2>
+        <p class="subtitle" id="mode-subtitle">WHS Methode 2 personen: 35% / 15%</p>
+        
+        <div class="toggle-container">
+            <div class="toggle-btn active" id="btn-2p" onclick="setMode(2)">2 Spelers</div>
+            <div class="toggle-btn" id="btn-3p" onclick="setMode(3)">3 Spelers</div>
+            <div class="toggle-btn" id="btn-4p" onclick="setMode(4)">4 Spelers</div>
+        </div>
+        
+        <div class="form-group">
+            <label>Teamnaam / Flight</label>
+            <input type="text" id="teamName" placeholder="Bijv. Flight 1">
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="form-group">
+            <label>Spelers & Playing Handicaps</label>
+            <div class="player-row">
+                <input type="text" id="player1" placeholder="Naam Speler A">
+                <input type="number" id="hcp1" step="0.1" placeholder="Hcp">
+            </div>
+            <div class="player-row">
+                <input type="text" id="player2" placeholder="Naam Speler B">
+                <input type="number" id="hcp2" step="0.1" placeholder="Hcp">
+            </div>
+            <div class="player-row" id="row-p3" style="display: none;">
+                <input type="text" id="player3" placeholder="Naam Speler C">
+                <input type="number" id="hcp3" step="0.1" placeholder="Hcp">
+            </div>
+            <div class="player-row" id="row-p4" style="display: none;">
+                <input type="text" id="player4" placeholder="Naam Speler D">
+                <input type="number" id="hcp4" step="0.1" placeholder="Hcp">
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="form-group">
+            <label>Bruto Score (slagen)</label>
+            <input type="number" id="gross" placeholder="Totaal aantal slagen">
+        </div>
+
+        <div class="button-group">
+            <div class="button-row">
+                <button class="action-btn btn-primary" onclick="calculateScramble()">Bereken</button>
+                <button class="action-btn btn-success" onclick="saveTeamResult()">Sla op</button>
+            </div>
+            <button class="action-btn btn-secondary" onclick="resetForm()">Reset formulier</button>
+        </div>
+
+        <div id="result-box">
+            <strong style="display:block; margin-bottom: 12px; font-size: 15px;">Berekening Teamhandicap:</strong>
+            <div id="breakdown-content"></div>
+            
+            <div class="result-line total-line">
+                <span>Teamhandicap:</span>
+                <span id="out-teamhcp">0.00</span>
+            </div>
+            <div class="result-line total-line">
+                <span>NETTO SCORE:</span>
+                <span class="net-score-text" id="out-net">0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="card" id="leaderboard-card" style="display: none;">
+        <h3>Klassement</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pos</th>
+                        <th>Team</th>
+                        <th>Type</th>
+                        <th>Bruto</th>
+                        <th>Hcp</th>
+                        <th>Netto</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+        </div>
+        <br>
+        <button class="action-btn btn-secondary" style="width: 100%;" onclick="exportToCSV()">Exporteer naar CSV</button>
+    </div>
+</div>
+
+<script>
+    let currentMode = 2; // Standaard
+    let savedResults = [];
+
+    function setMode(mode) {
+        currentMode = mode;
+        
+        document.getElementById('btn-2p').classList.toggle('active', mode === 2);
+        document.getElementById('btn-3p').classList.toggle('active', mode === 3);
+        document.getElementById('btn-4p').classList.toggle('active', mode === 4);
+        
+        document.getElementById('row-p3').style.display = (mode === 3 || mode === 4) ? 'flex' : 'none';
+        document.getElementById('row-p4').style.display = mode === 4 ? 'flex' : 'none';
+        
+        let subtitle = "";
+        if(mode === 2) subtitle = "WHS Methode 2 personen: 35% / 15%";
+        else if(mode === 3) subtitle = "WHS Methode 3 personen: 30% / 20% / 10%";
+        else subtitle = "WHS Methode 4 personen: 25% / 20% / 15% / 10%";
+        
+        document.getElementById('mode-subtitle').innerText = subtitle;
+        document.getElementById('result-box').style.display = 'none';
+    }
+
+    function getCalculatedData() {
+        let teamName = document.getElementById('teamName').value.trim() || "Onbekend Team";
+        let gross = parseFloat(document.getElementById('gross').value.replace(',','.')) || 0;
+        
+        let players = [];
+        let rawHcps = [];
+
+        players.push(document.getElementById('player1').value.trim() || "Speler A");
+        players.push(document.getElementById('player2').value.trim() || "Speler B");
+        rawHcps.push(parseFloat(document.getElementById('hcp1').value.replace(',','.')) || 0);
+        rawHcps.push(parseFloat(document.getElementById('hcp2').value.replace(',','.')) || 0);
+
+        if (currentMode >= 3) {
+            players.push(document.getElementById('player3').value.trim() || "Speler C");
+            rawHcps.push(parseFloat(document.getElementById('hcp3').value.replace(',','.')) || 0);
+        }
+        if (currentMode === 4) {
+            players.push(document.getElementById('player4').value.trim() || "Speler D");
+            rawHcps.push(parseFloat(document.getElementById('hcp4').value.replace(',','.')) || 0);
+        }
+
+        let hcps = [...rawHcps].sort((a, b) => a - b);
+        let breakdown = [];
+        
+        if (currentMode === 4) {
+            breakdown.push(hcps[0] * 0.25);
+            breakdown.push(hcps[1] * 0.20);
+            breakdown.push(hcps[2] * 0.15);
+            breakdown.push(hcps[3] * 0.10);
+        } else if (currentMode === 3) {
+            breakdown.push(hcps[0] * 0.30);
+            breakdown.push(hcps[1] * 0.20);
+            breakdown.push(hcps[2] * 0.10);
+        } else {
+            breakdown.push(hcps[0] * 0.35);
+            breakdown.push(hcps[1] * 0.15);
+        }
+
+        let teamHcp = breakdown.reduce((a, b) => a + b, 0);
+        let netScore = gross > 0 ? (gross - teamHcp) : 0;
+
+        return {
+            mode: currentMode,
+            teamName: teamName,
+            playerNames: players,
+            hcps: hcps,
+            breakdown: breakdown,
+            teamHcp: teamHcp,
+            gross: gross,
+            netScore: netScore
+        };
+    }
+
+    function calculateScramble() {
+        let data = getCalculatedData();
+        let breakdownHTML = "";
+
+        if (data.mode === 4) {
+            breakdownHTML = `
+                <div class="result-line"><span>Laagste hcp (${data.hcps[0]}) x 25%:</span> <span>${data.breakdown[0].toFixed(2)}</span></div>
+                <div class="result-line"><span>2e hcp (${data.hcps[1]}) x 20%:</span> <span>${data.breakdown[1].toFixed(2)}</span></div>
+                <div class="result-line"><span>3e hcp (${data.hcps[2]}) x 15%:</span> <span>${data.breakdown[2].toFixed(2)}</span></div>
+                <div class="result-line"><span>Hoogste hcp (${data.hcps[3]}) x 10%:</span> <span>${data.breakdown[3].toFixed(2)}</span></div>
+            `;
+        } else if (data.mode === 3) {
+            breakdownHTML = `
+                <div class="result-line"><span>Laagste hcp (${data.hcps[0]}) x 30%:</span> <span>${data.breakdown[0].toFixed(2)}</span></div>
+                <div class="result-line"><span>Middelste hcp (${data.hcps[1]}) x 20%:</span> <span>${data.breakdown[1].toFixed(2)}</span></div>
+                <div class="result-line"><span>Hoogste hcp (${data.hcps[2]}) x 10%:</span> <span>${data.breakdown[2].toFixed(2)}</span></div>
+            `;
+        } else {
+            breakdownHTML = `
+                <div class="result-line"><span>Laagste hcp (${data.hcps[0]}) x 35%:</span> <span>${data.breakdown[0].toFixed(2)}</span></div>
+                <div class="result-line"><span>Hoogste hcp (${data.hcps[1]}) x 15%:</span> <span>${data.breakdown[1].toFixed(2)}</span></div>
+            `;
+        }
+
+        document.getElementById('breakdown-content').innerHTML = breakdownHTML;
+        document.getElementById('out-teamhcp').innerText = data.teamHcp.toFixed(2);
+        document.getElementById('out-net').innerText = data.gross > 0 ? data.netScore.toFixed(2) : "-";
+        document.getElementById('result-box').style.display = 'block';
+    }
+
+    function saveTeamResult() {
+        let data = getCalculatedData();
+        if (data.gross === 0) {
+            alert("Vul eerst een bruto score in voordat je opslaat.");
+            return;
+        }
+        savedResults.push(data);
+        updateLeaderboard();
+        resetForm();
+    }
+
+    function deleteTeam(index) {
+        if(confirm("Team verwijderen?")) {
+            savedResults.splice(index, 1);
+            updateLeaderboard();
+        }
+    }
+
+    function updateLeaderboard() {
+        let tbody = document.getElementById('leaderboard-body');
+        tbody.innerHTML = ""; 
+        
+        savedResults.sort((a, b) => a.netScore - b.netScore);
+
+        savedResults.forEach((team, index) => {
+            let rankClass = "";
+            if (index === 0) rankClass = "rank-1";
+            else if (index === 1) rankClass = "rank-2";
+            else if (index === 2) rankClass = "rank-3";
+
+            let modeText = team.mode + "P";
+
+            let row = `<tr class="${rankClass}">
+                <td>${index + 1}</td>
+                <td><strong>${team.teamName}</strong><br><span style="font-size: 11px; color: #8e8e93;">${team.playerNames.join(', ')}</span></td>
+                <td>${modeText}</td>
+                <td>${team.gross}</td>
+                <td>${team.teamHcp.toFixed(2)}</td>
+                <td><strong style="color:#007aff;">${team.netScore.toFixed(2)}</strong></td>
+                <td style="text-align: center;"><button class="btn-delete" onclick="deleteTeam(${index})">✕</button></td>
+            </tr>`;
+            tbody.innerHTML += row;
+        });
+
+        document.getElementById('leaderboard-card').style.display = savedResults.length > 0 ? 'block' : 'none';
+    }
+
+    function resetForm() {
+        document.getElementById('teamName').value = '';
+        document.getElementById('player1').value = '';
+        document.getElementById('player2').value = '';
+        document.getElementById('player3').value = '';
+        document.getElementById('player4').value = '';
+        document.getElementById('hcp1').value = '';
+        document.getElementById('hcp2').value = '';
+        document.getElementById('hcp3').value = '';
+        document.getElementById('hcp4').value = '';
+        document.getElementById('gross').value = '';
+        document.getElementById('result-box').style.display = 'none';
+    }
+
+    function exportToCSV() {
+        if (savedResults.length === 0) return alert("Geen resultaten om te exporteren.");
+
+        let csvContent = "Positie,Teamnaam,Type,Speler 1,Speler 2,Speler 3,Speler 4,Bruto Score,Teamhandicap,Netto Score\n";
+        
+        savedResults.forEach((team, index) => {
+            let safeName = team.teamName.replace(/,/g, " ");
+            let s1 = (team.playerNames[0] || "").replace(/,/g, " ");
+            let s2 = (team.playerNames[1] || "").replace(/,/g, " ");
+            let s3 = team.mode >= 3 ? (team.playerNames[2] || "").replace(/,/g, " ") : "";
+            let s4 = team.mode === 4 ? (team.playerNames[3] || "").replace(/,/g, " ") : "";
+            let type = team.mode + "-Persoons";
+            
+            let row = `${index + 1},${safeName},${type},${s1},${s2},${s3},${s4},${team.gross},${team.teamHcp.toFixed(2)},${team.netScore.toFixed(2)}`;
+            csvContent += row + "\n";
+        });
+
+        let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        let link = document.createElement("a");
+        let url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "scramble_uitslag.csv");
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>
