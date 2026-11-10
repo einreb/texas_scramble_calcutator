@@ -17,7 +17,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 16px 100px 16px; /* Extra padding onder voor de tab-bar */
+            padding: 20px 16px 100px 16px; /* Extra padding onder voor de tab bar */
             margin: 0;
             -webkit-font-smoothing: antialiased;
         }
@@ -25,19 +25,6 @@
             max-width: 650px;
             width: 100%;
         }
-        .view-section {
-            display: none;
-            width: 100%;
-        }
-        .view-section.active {
-            display: block;
-            animation: fadeIn 0.2s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .card {
             background-color: #ffffff;
             border-radius: 16px;
@@ -60,7 +47,7 @@
             margin-bottom: 24px;
         }
         
-        /* Apple Segmented Control (Toggle) */
+        /* Segmented Control (Toggle) */
         .toggle-container {
             display: flex;
             background-color: #e3e3e8;
@@ -102,19 +89,22 @@
             background-color: #f2f2f7;
             border: none;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 16px; /* Voorkomt zoom op iOS */
             color: #000000;
-            font-family: inherit;
+            -webkit-appearance: none;
+        }
+        input[readonly] {
+            background-color: #e3e3e8;
+            color: #8e8e93;
         }
         select {
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%238e8e93%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
             background-repeat: no-repeat;
-            background-position: right 14px center;
-            background-size: 16px;
-            padding-right: 40px;
+            background-position: right 14px top 50%;
+            background-size: 12px auto;
+            padding-right: 30px;
         }
-        input:focus, select:focus {
+        input:focus:not([readonly]), select:focus {
             outline: 2px solid #007aff;
             background-color: #ffffff;
         }
@@ -124,23 +114,18 @@
             gap: 10px;
             margin-bottom: 10px;
         }
-        .player-row select, .player-row input[type="text"] { flex: 2; }
-        .player-row input[type="number"] { flex: 1; }
+        .player-row select { flex: 2; }
+        .player-row input[type="number"] { flex: 1; text-align: center; }
         
         .divider {
             border-bottom: 1px solid #e5e5ea;
             margin: 24px 0;
         }
         
-        .button-group {
-            display: flex;
-            gap: 12px;
-            flex-direction: column;
-            margin-top: 10px;
-        }
         .button-row {
             display: flex;
             gap: 12px;
+            margin-top: 10px;
         }
         button.action-btn {
             flex: 1;
@@ -159,16 +144,16 @@
         .btn-primary { background-color: #007aff; color: white; }
         .btn-success { background-color: #34c759; color: white; }
         .btn-secondary { background-color: #e5e5ea; color: #007aff; }
-        .btn-danger { background-color: #ff3b30; color: white; }
         
         .btn-delete {
             background-color: transparent;
             color: #ff3b30;
             border: none;
-            font-size: 20px;
-            padding: 5px 10px;
+            font-size: 18px;
+            padding: 5px;
             cursor: pointer;
             touch-action: manipulation;
+            user-select: none;
         }
 
         #result-box {
@@ -211,66 +196,52 @@
             padding: 12px 8px;
             border-bottom: 1px solid #e5e5ea;
         }
-        th { 
-            color: #8e8e93; 
-            font-weight: 600; 
-            font-size: 12px;
-            text-transform: uppercase;
-        }
+        th { color: #8e8e93; font-weight: 600; font-size: 12px; text-transform: uppercase; }
         .rank-1 { background-color: rgba(255, 215, 0, 0.15); }
         .rank-2 { background-color: rgba(192, 192, 192, 0.15); }
         .rank-3 { background-color: rgba(205, 127, 50, 0.15); }
 
-        /* Roster List Styles */
-        .roster-header {
-            display: flex; justify-content: space-between; font-weight: 600;
-            font-size: 12px; color: #8e8e93; text-transform: uppercase;
-            padding: 0 10px 8px 10px; border-bottom: 1px solid #e5e5ea;
-        }
-        .roster-list { list-style: none; padding: 0; margin: 0; }
-        .roster-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 10px; border-bottom: 1px solid #e5e5ea;
-        }
-        .roster-item:last-child { border-bottom: none; }
-        .roster-name { font-weight: 600; color: #1c1c1e; }
-        .roster-hcp { color: #8e8e93; font-variant-numeric: tabular-nums; }
-        .roster-info { display: flex; flex-direction: column; }
-        
-        /* Tab Bar Bottom */
+        /* iOS Tab Bar Bottom */
         .tab-bar {
             position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background-color: rgba(248, 248, 248, 0.92);
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(249, 249, 249, 0.94);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-top: 1px solid #d1d1d6;
+            border-top: 1px solid #e5e5ea;
             display: flex;
             justify-content: space-around;
-            padding: 12px 0 24px 0; /* Extra padding voor iPhone home indicator */
+            padding: 10px 0 25px 0; /* Padding voor iOS swipe bar */
             z-index: 1000;
         }
         .tab-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
+            text-align: center;
             color: #8e8e93;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            width: 50%;
+            flex: 1;
         }
         .tab-item.active { color: #007aff; }
-        .tab-icon { font-size: 24px; line-height: 1; }
+        .tab-icon { font-size: 24px; margin-bottom: 3px; display: block; }
+
+        /* Tab Content Weergave */
+        .tab-content { display: none; width: 100%; }
+        .tab-content.active { display: block; }
+        
+        /* Flexbox voor Speler Toevoegen form */
+        .add-player-form { display: flex; gap: 10px; align-items: flex-end; }
+        .add-player-form .field { flex: 1; }
+        .add-player-form button { flex: 0.5; padding: 12px; }
     </style>
 </head>
 <body>
 
 <!-- TAB 1: CALCULATOR -->
-<div id="view-calculator" class="container view-section active">
+<div id="tab-calculator" class="container tab-content active">
     <div class="card">
-        <h2>Calculator</h2>
+        <h2>Scramble Calculator</h2>
         <p class="subtitle" id="mode-subtitle">WHS Methode 2 personen: 35% / 15%</p>
         
         <div class="toggle-container">
@@ -287,30 +258,22 @@
         <div class="divider"></div>
 
         <div class="form-group">
-            <label>Spelers (kies uit lijst)</label>
+            <label>Spelers (Selecteer uit lijst)</label>
             <div class="player-row">
-                <select id="playerSel1" onchange="autoFillHcp(1)">
-                    <option value="">Selecteer speler...</option>
-                </select>
-                <input type="number" id="hcp1" step="0.1" placeholder="Hcp">
+                <select id="p1-select" onchange="autoFillHcp(1)"><option value="">Kies Speler A...</option></select>
+                <input type="number" id="hcp1" step="0.1" placeholder="Hcp" readonly>
             </div>
             <div class="player-row">
-                <select id="playerSel2" onchange="autoFillHcp(2)">
-                    <option value="">Selecteer speler...</option>
-                </select>
-                <input type="number" id="hcp2" step="0.1" placeholder="Hcp">
+                <select id="p2-select" onchange="autoFillHcp(2)"><option value="">Kies Speler B...</option></select>
+                <input type="number" id="hcp2" step="0.1" placeholder="Hcp" readonly>
             </div>
             <div class="player-row" id="row-p3" style="display: none;">
-                <select id="playerSel3" onchange="autoFillHcp(3)">
-                    <option value="">Selecteer speler...</option>
-                </select>
-                <input type="number" id="hcp3" step="0.1" placeholder="Hcp">
+                <select id="p3-select" onchange="autoFillHcp(3)"><option value="">Kies Speler C...</option></select>
+                <input type="number" id="hcp3" step="0.1" placeholder="Hcp" readonly>
             </div>
             <div class="player-row" id="row-p4" style="display: none;">
-                <select id="playerSel4" onchange="autoFillHcp(4)">
-                    <option value="">Selecteer speler...</option>
-                </select>
-                <input type="number" id="hcp4" step="0.1" placeholder="Hcp">
+                <select id="p4-select" onchange="autoFillHcp(4)"><option value="">Kies Speler D...</option></select>
+                <input type="number" id="hcp4" step="0.1" placeholder="Hcp" readonly>
             </div>
         </div>
 
@@ -321,12 +284,12 @@
             <input type="number" id="gross" placeholder="Totaal aantal slagen">
         </div>
 
-        <div class="button-group">
-            <div class="button-row">
-                <button class="action-btn btn-primary" onclick="calculateScramble()">Bereken</button>
-                <button class="action-btn btn-success" onclick="saveTeamResult()">Sla op</button>
-            </div>
-            <button class="action-btn btn-secondary" onclick="resetCalculator()">Reset velden</button>
+        <div class="button-row">
+            <button class="action-btn btn-primary" onclick="calculateScramble()">Bereken</button>
+            <button class="action-btn btn-success" onclick="saveTeamResult()">Sla op</button>
+        </div>
+        <div class="button-row">
+            <button class="action-btn btn-secondary" onclick="resetForm()">Reset formulier</button>
         </div>
 
         <div id="result-box">
@@ -368,191 +331,163 @@
     </div>
 </div>
 
-<!-- TAB 2: SPELERSLIJST (ROSTER) -->
-<div id="view-roster" class="container view-section">
+<!-- TAB 2: SPELERS BEHEREN -->
+<div id="tab-players" class="container tab-content">
     <div class="card">
-        <h2>Spelerslijst</h2>
-        <p class="subtitle">Voeg spelers toe om ze snel in de calculator te selecteren (Max 20).</p>
+        <h2>Spelers Database</h2>
+        <p class="subtitle"><span id="player-count">0</span> / 30 geregistreerd</p>
         
-        <div class="form-group">
-            <label>Nieuwe Speler</label>
-            <div class="player-row">
+        <div class="add-player-form">
+            <div class="field">
+                <label>Naam</label>
                 <input type="text" id="newPlayerName" placeholder="Naam speler">
+            </div>
+            <div class="field">
+                <label>Handicap</label>
                 <input type="number" id="newPlayerHcp" step="0.1" placeholder="Hcp">
             </div>
-            <button class="action-btn btn-primary" style="width: 100%; margin-top: 5px;" onclick="addPlayer()">Voeg Toe</button>
+            <button class="action-btn btn-primary" onclick="addPlayer()">Voeg toe</button>
         </div>
     </div>
 
-    <div class="card">
-        <div class="roster-header">
-            <span>Naam & Handicap</span>
-            <span id="roster-count">0/20</span>
+    <div class="card" id="players-list-card" style="display: none;">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Naam</th>
+                        <th>Handicap</th>
+                        <th style="text-align: center;">Wissen</th>
+                    </tr>
+                </thead>
+                <tbody id="players-body"></tbody>
+            </table>
         </div>
-        <ul class="roster-list" id="roster-list">
-            <!-- Spelers komen hier via JS -->
-        </ul>
-        <p id="empty-roster-msg" style="text-align: center; color: #8e8e93; font-size: 14px; margin-top: 20px;">
-            Je hebt nog geen spelers toegevoegd.
-        </p>
     </div>
 </div>
 
 <!-- BOTTOM TAB BAR -->
 <div class="tab-bar">
-    <div class="tab-item active" id="tab-btn-calculator" onclick="switchTab('calculator')">
-        <div class="tab-icon">🖩</div>
-        <span>Calculator</span>
+    <div class="tab-item active" id="nav-calculator" onclick="switchTab('calculator')">
+        <span class="tab-icon">⛳️</span>
+        Calculator
     </div>
-    <div class="tab-item" id="tab-btn-roster" onclick="switchTab('roster')">
-        <div class="tab-icon">👥</div>
-        <span>Spelerslijst</span>
+    <div class="tab-item" id="nav-players" onclick="switchTab('players')">
+        <span class="tab-icon">👥</span>
+        Spelers
     </div>
 </div>
 
 <script>
-    // State Variables
-    let currentMode = 2; // 2, 3 of 4 spelers
-    let savedResults = []; // Leaderboard
-    let roster = []; // Spelerslijst
+    // Data opslag arrays
+    let playersList = JSON.parse(localStorage.getItem('scramble_players')) || [];
+    let savedResults = JSON.parse(localStorage.getItem('scramble_results')) || [];
+    let currentMode = 2; // Standaard aantal spelers
 
-    // Initaliseer data vanuit localStorage
+    // Initialisatie bij laden pagina
     window.onload = function() {
-        let storedRoster = localStorage.getItem('scrambleRoster');
-        if (storedRoster) roster = JSON.parse(storedRoster);
-        
-        let storedLB = localStorage.getItem('scrambleLeaderboard');
-        if (storedLB) savedResults = JSON.parse(storedLB);
-
-        renderRoster();
-        updateDropdowns();
-        updateLeaderboard();
-    };
+        renderPlayersList();
+        updatePlayerDropdowns();
+        renderLeaderboard();
+        setMode(currentMode);
+    }
 
     // --- TAB NAVIGATIE ---
-    function switchTab(tab) {
-        document.getElementById('view-calculator').classList.remove('active');
-        document.getElementById('view-roster').classList.remove('active');
-        document.getElementById('tab-btn-calculator').classList.remove('active');
-        document.getElementById('tab-btn-roster').classList.remove('active');
+    function switchTab(tabId) {
+        document.getElementById('tab-calculator').classList.remove('active');
+        document.getElementById('tab-players').classList.remove('active');
+        document.getElementById('nav-calculator').classList.remove('active');
+        document.getElementById('nav-players').classList.remove('active');
 
-        document.getElementById('view-' + tab).classList.add('active');
-        document.getElementById('tab-btn-' + tab).classList.add('active');
-        
-        // Zorg dat dropdowns up to date zijn als we naar calculator gaan
-        if(tab === 'calculator') updateDropdowns();
+        document.getElementById('tab-' + tabId).classList.add('active');
+        document.getElementById('nav-' + tabId).classList.add('active');
     }
 
-    // --- ROSTER (SPELERSLIJST) LOGICA ---
+    // --- SPELERS DATABASE LOGICA ---
     function addPlayer() {
-        if (roster.length >= 20) {
-            alert("Je hebt het maximum van 20 spelers bereikt.");
-            return;
-        }
-
-        let nameInput = document.getElementById('newPlayerName');
-        let hcpInput = document.getElementById('newPlayerHcp');
-        
-        let name = nameInput.value.trim();
-        let hcp = parseFloat(hcpInput.value.replace(',', '.'));
+        let name = document.getElementById('newPlayerName').value.trim();
+        let hcpText = document.getElementById('newPlayerHcp').value.replace(',', '.');
+        let hcp = parseFloat(hcpText) || 0;
 
         if (!name) {
-            alert("Vul a.u.b. een naam in.");
-            return;
-        }
-        if (isNaN(hcp)) {
-            alert("Vul a.u.b. een geldige handicap in.");
+            alert("Vul een naam in.");
             return;
         }
 
-        roster.push({ id: Date.now().toString(), name: name, hcp: hcp });
-        
-        // Reset velden
-        nameInput.value = '';
-        hcpInput.value = '';
-        nameInput.focus();
+        // Limiet van 30 personen
+        if (playersList.length >= 30) {
+            alert("De limiet is bereikt. Je kunt maximaal 30 deelnemers toevoegen.");
+            return;
+        }
 
-        saveRoster();
+        playersList.push({ name: name, hcp: hcp });
+        // Sorteer alfabetisch
+        playersList.sort((a, b) => a.name.localeCompare(b.name));
+        
+        savePlayersData();
+        
+        document.getElementById('newPlayerName').value = '';
+        document.getElementById('newPlayerHcp').value = '';
+        document.getElementById('newPlayerName').focus();
     }
 
-    function deletePlayer(id) {
-        if(confirm("Speler verwijderen?")) {
-            roster = roster.filter(p => p.id !== id);
-            saveRoster();
+    function deletePlayer(index) {
+        if(confirm("Speler verwijderen? Dit beïnvloedt niet de opgeslagen resultaten in het klassement.")) {
+            playersList.splice(index, 1);
+            savePlayersData();
         }
     }
 
-    function saveRoster() {
-        localStorage.setItem('scrambleRoster', JSON.stringify(roster));
-        renderRoster();
-        updateDropdowns();
+    function savePlayersData() {
+        localStorage.setItem('scramble_players', JSON.stringify(playersList));
+        renderPlayersList();
+        updatePlayerDropdowns();
     }
 
-    function renderRoster() {
-        let list = document.getElementById('roster-list');
-        let msg = document.getElementById('empty-roster-msg');
-        let count = document.getElementById('roster-count');
+    function renderPlayersList() {
+        document.getElementById('player-count').innerText = playersList.length;
+        let tbody = document.getElementById('players-body');
+        tbody.innerHTML = "";
         
-        list.innerHTML = "";
-        count.innerText = `${roster.length}/20`;
-        
-        if (roster.length === 0) {
-            msg.style.display = 'block';
+        playersList.forEach((p, index) => {
+            let row = `<tr>
+                <td><strong>${p.name}</strong></td>
+                <td>${p.hcp.toFixed(1)}</td>
+                <td style="text-align: center;"><button class="btn-delete" onclick="deletePlayer(${index})">✕</button></td>
+            </tr>`;
+            tbody.innerHTML += row;
+        });
+
+        document.getElementById('players-list-card').style.display = playersList.length > 0 ? 'block' : 'none';
+    }
+
+    function updatePlayerDropdowns() {
+        let optionsHTML = '<option value="">Kies uit lijst...</option>';
+        playersList.forEach(p => {
+            optionsHTML += `<option value="${p.hcp}">${p.name} (Hcp: ${p.hcp.toFixed(1)})</option>`;
+        });
+
+        for(let i=1; i<=4; i++) {
+            let selectElement = document.getElementById('p' + i + '-select');
+            // Bewaar huidige selectie indien mogelijk
+            let currentVal = selectElement.value; 
+            selectElement.innerHTML = optionsHTML;
+            // Als de speler was geselecteerd, en na het updaten is deze niet meer geldig, pas veld aan.
+            autoFillHcp(i);
+        }
+    }
+
+    // Automatisch handicap invullen bij keuze uit dropdown (Read-Only)
+    function autoFillHcp(playerNum) {
+        let select = document.getElementById('p' + playerNum + '-select');
+        let hcpInput = document.getElementById('hcp' + playerNum);
+        if(select.selectedIndex > 0) {
+            hcpInput.value = select.value;
         } else {
-            msg.style.display = 'none';
-            roster.forEach(player => {
-                let li = document.createElement('li');
-                li.className = 'roster-item';
-                li.innerHTML = `
-                    <div class="roster-info">
-                        <span class="roster-name">${player.name}</span>
-                        <span class="roster-hcp">Hcp: ${player.hcp.toFixed(1)}</span>
-                    </div>
-                    <button class="btn-delete" onclick="deletePlayer('${player.id}')">✕</button>
-                `;
-                list.appendChild(li);
-            });
-        }
-    }
-
-    function updateDropdowns() {
-        for (let i = 1; i <= 4; i++) {
-            let select = document.getElementById(`playerSel${i}`);
-            let currentValue = select.value; // Bewaar huidige selectie
-            
-            select.innerHTML = '<option value="">Selecteer speler...</option>';
-            roster.forEach(p => {
-                let opt = document.createElement('option');
-                opt.value = p.id;
-                opt.innerText = p.name;
-                select.appendChild(opt);
-            });
-
-            // Zet selectie terug als de speler nog in de lijst staat
-            if (roster.find(p => p.id === currentValue)) {
-                select.value = currentValue;
-            } else {
-                select.value = "";
-                document.getElementById(`hcp${i}`).value = ""; // Clear hcp als speler verwijderd is
-            }
-        }
-    }
-
-    function autoFillHcp(slotIndex) {
-        let select = document.getElementById(`playerSel${slotIndex}`);
-        let hcpInput = document.getElementById(`hcp${slotIndex}`);
-        let selectedId = select.value;
-        
-        if (!selectedId) {
             hcpInput.value = "";
-            return;
-        }
-
-        let player = roster.find(p => p.id === selectedId);
-        if (player) {
-            hcpInput.value = player.hcp;
         }
     }
+
 
     // --- CALCULATOR LOGICA ---
     function setMode(mode) {
@@ -562,8 +497,8 @@
         document.getElementById('btn-3p').classList.toggle('active', mode === 3);
         document.getElementById('btn-4p').classList.toggle('active', mode === 4);
         
-        document.getElementById('row-p3').style.display = (mode === 3 || mode === 4) ? 'flex' : 'none';
-        document.getElementById('row-p4').style.display = mode === 4 ? 'flex' : 'none';
+        document.getElementById('row-p3').style.display = (mode >= 3) ? 'flex' : 'none';
+        document.getElementById('row-p4').style.display = (mode === 4) ? 'flex' : 'none';
         
         let subtitle = "";
         if(mode === 2) subtitle = "WHS Methode 2 personen: 35% / 15%";
@@ -574,10 +509,14 @@
         document.getElementById('result-box').style.display = 'none';
     }
 
-    function getPlayerNameFromSelect(slotIndex) {
-        let select = document.getElementById(`playerSel${slotIndex}`);
-        if(select.value === "") return "";
-        return select.options[select.selectedIndex].text;
+    function getPlayerNameFromSelect(playerNum) {
+        let select = document.getElementById('p' + playerNum + '-select');
+        if (select.selectedIndex > 0) {
+            // Haal naam uit de tekst (verwijder de " (Hcp: X)" toevoeging)
+            let rawText = select.options[select.selectedIndex].text;
+            return rawText.split(" (Hcp:")[0];
+        }
+        return "Speler " + playerNum;
     }
 
     function getCalculatedData() {
@@ -587,19 +526,10 @@
         let players = [];
         let rawHcps = [];
 
-        // Haal namen uit de dropdown text, of placeholder
-        players.push(getPlayerNameFromSelect(1) || "Speler A");
-        players.push(getPlayerNameFromSelect(2) || "Speler B");
-        rawHcps.push(parseFloat(document.getElementById('hcp1').value.replace(',','.')) || 0);
-        rawHcps.push(parseFloat(document.getElementById('hcp2').value.replace(',','.')) || 0);
-
-        if (currentMode >= 3) {
-            players.push(getPlayerNameFromSelect(3) || "Speler C");
-            rawHcps.push(parseFloat(document.getElementById('hcp3').value.replace(',','.')) || 0);
-        }
-        if (currentMode === 4) {
-            players.push(getPlayerNameFromSelect(4) || "Speler D");
-            rawHcps.push(parseFloat(document.getElementById('hcp4').value.replace(',','.')) || 0);
+        // Check selected players
+        for(let i=1; i<=currentMode; i++) {
+            players.push(getPlayerNameFromSelect(i));
+            rawHcps.push(parseFloat(document.getElementById('hcp' + i).value.replace(',','.')) || 0);
         }
 
         let hcps = [...rawHcps].sort((a, b) => a - b);
@@ -671,23 +601,21 @@
             return;
         }
         savedResults.push(data);
-        saveLeaderboard();
-        resetCalculator();
+        localStorage.setItem('scramble_results', JSON.stringify(savedResults));
+        
+        renderLeaderboard();
+        resetForm();
     }
 
     function deleteTeam(index) {
-        if(confirm("Team verwijderen uit klassement?")) {
+        if(confirm("Team verwijderen?")) {
             savedResults.splice(index, 1);
-            saveLeaderboard();
+            localStorage.setItem('scramble_results', JSON.stringify(savedResults));
+            renderLeaderboard();
         }
     }
 
-    function saveLeaderboard() {
-        localStorage.setItem('scrambleLeaderboard', JSON.stringify(savedResults));
-        updateLeaderboard();
-    }
-
-    function updateLeaderboard() {
+    function renderLeaderboard() {
         let tbody = document.getElementById('leaderboard-body');
         tbody.innerHTML = ""; 
         
@@ -716,11 +644,11 @@
         document.getElementById('leaderboard-card').style.display = savedResults.length > 0 ? 'block' : 'none';
     }
 
-    function resetCalculator() {
+    function resetForm() {
         document.getElementById('teamName').value = '';
         for(let i=1; i<=4; i++) {
-            document.getElementById(`playerSel${i}`).value = '';
-            document.getElementById(`hcp${i}`).value = '';
+            document.getElementById('p' + i + '-select').selectedIndex = 0;
+            document.getElementById('hcp' + i).value = '';
         }
         document.getElementById('gross').value = '';
         document.getElementById('result-box').style.display = 'none';
